@@ -1,6 +1,5 @@
 package underscore;
 
-import java.util.Arrays;
 
 public class Classifier {
 
