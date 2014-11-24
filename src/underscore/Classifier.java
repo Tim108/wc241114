@@ -3,6 +3,8 @@ package underscore;
 
 public class Classifier {
 
+	private boolean showComments = true;
+
 	/**
 	 * 2.1 tokenization This method will strip any punctiation that is mentioned
 	 * in the setup file and split the sentence into seperate words.
@@ -54,15 +56,26 @@ public class Classifier {
 		return resLog;
 	}
 	
+	/**
+	 * 2.2.2
+	 * @param data
+	 * @return
+	 */
 	public SetUp.GENDER checkGender(String data){
 		//prepare data
 		String[] words = extract(data);
 		//Check first if it is a male
 		double pmale = overallP(words, SetUp.GENDER.MALE);
+		if (showComments ){
+			System.out.println("pmale="+pmale);
+		}
 		//Check second if it is a female
 		double pfemale = overallP(words, SetUp.GENDER.FEMALE);
+		if (showComments ){
+			System.out.println("pfemale="+pfemale);
+		}
 		//Conclude shit
-		if (pmale > pfemale){
+		if (pmale < pfemale){
 			return SetUp.GENDER.MALE;
 		}
 		else {
@@ -84,8 +97,11 @@ public class Classifier {
 		insert("ladies", 2, SetUp.GENDER.FEMALE);
 		insert("love", 5, SetUp.GENDER.FEMALE);
 		insert("i", 15, SetUp.GENDER.FEMALE);
-		System.out.println(c.overallP(c.extract("Yo Dude, my male henk is fucking herman"),
-				SetUp.GENDER.MALE));
+		insert("i", 10, SetUp.GENDER.MALE);
+		System.out.println("MALE? "+c.checkGender("Yo Dude, my male henk is fucking herman"));
+		System.out.println("FEMALE? "+c.checkGender("my love is sweet like i am"));
+		System.out.println("MALE? "+c.checkGender("henk has a dude, herman, i love"));
+		System.out.println("???? "+c.checkGender("no idea"));
 		// System.out.println(Arrays.toString(c.extract("hoi Ddit is een toiasf98 Q# Q)M FH#QJ Q(# (FQ FQ#*)R Q#FQ(_JFQ)*VH qhroqnr98 q0wjf h9qhfqja fc1h0qiofejq 9wgr39h 9f7gq3r q9 estje?")));
 	}
 }
