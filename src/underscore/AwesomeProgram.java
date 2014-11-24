@@ -9,6 +9,8 @@ import javax.swing.*;
 
 public class AwesomeProgram {
 
+	private Classifier c = new Classifier();
+	
 	private JFrame frame;
 	private JFrame frame2;
 	
@@ -66,7 +68,6 @@ public class AwesomeProgram {
 	            {
 	            	String txt = a1.getText();
 	            	System.out.println(txt);
-	            	//roep functie aan met txt..
 	            }
 	        });      
 	 

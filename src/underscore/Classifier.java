@@ -42,7 +42,8 @@ public class Classifier {
 	 * @param given
 	 * @return
 	 */
-	public double overallP(String[] words, SetUp.GENDER given) {
+	public double overallP(String txt, SetUp.GENDER given) {
+		String[] words = extract(txt);
 		double res = -1;
 		for (String word : words) {
 			if (res == -1) {
@@ -69,8 +70,7 @@ public class Classifier {
 		insert("ladies", 2, SetUp.GENDER.FEMALE);
 		insert("love", 5, SetUp.GENDER.FEMALE);
 		insert("i", 15, SetUp.GENDER.FEMALE);
-		System.out.println(c.overallP(
-				c.extract("Yo Dude, my male henk is fucking herman"),
+		System.out.println(c.overallP("Yo Dude, my male henk is fucking herman",
 				SetUp.GENDER.MALE));
 		// System.out.println(Arrays.toString(c.extract("hoi Ddit is een toiasf98 Q# Q)M FH#QJ Q(# (FQ FQ#*)R Q#FQ(_JFQ)*VH qhroqnr98 q0wjf h9qhfqja fc1h0qiofejq 9wgr39h 9f7gq3r q9 estje?")));
 	}
