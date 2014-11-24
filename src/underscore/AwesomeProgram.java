@@ -2,6 +2,8 @@ package underscore;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -9,6 +11,13 @@ public class AwesomeProgram {
 
 	private JFrame frame;
 	private JFrame frame2;
+	
+	private JLabel l1;
+	private JLabel l2;
+	private JTextArea a1;
+	private JButton b1;
+	private JButton b2;
+	private JButton b3;
 
 	/**
 	 * Launch the application.
@@ -45,23 +54,33 @@ public class AwesomeProgram {
 			frame.setBounds(100, 100, 400, 300);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLayout(new BorderLayout());
-			JLabel l1 = new JLabel("Enter a sentence here");
+			l1 = new JLabel("Enter a sentence here");
 			frame.add(l1, BorderLayout.NORTH);
-			JTextArea a1 = new JTextArea(400,200);
+			a1 = new JTextArea(400,200);
 			frame.add(a1, BorderLayout.CENTER);
-			JButton b1 = new JButton("Confirm");
+			b1 = new JButton("Confirm");
 			frame.add(b1, BorderLayout.SOUTH);
+			b1.addActionListener(new ActionListener() {
+				 
+	            public void actionPerformed(ActionEvent e)
+	            {
+	            	String txt = a1.getText();
+	            	System.out.println(txt);
+	            	//roep functie aan met txt..
+	            }
+	        });      
+	 
 		}else{
 			//output frame
 			frame2 = new JFrame();
 			frame2.setBounds(100, 100, 400, 300);
 			frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame2.setLayout(new BorderLayout());
-			JLabel l2 = new JLabel("This is not manly");
+			l2 = new JLabel("This is not manly");
 			frame2.add(l2, BorderLayout.NORTH);
-			JButton b2 = new JButton("You're right");
+			b2 = new JButton("You're right");
 			frame2.add(b2, BorderLayout.SOUTH);
-			JButton b3 = new JButton("Das bullshit");
+			b3 = new JButton("Das bullshit");
 			frame2.add(b3, BorderLayout.SOUTH);
 		}
 	}
