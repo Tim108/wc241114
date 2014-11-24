@@ -9,15 +9,19 @@ public class SetUp {
 		public static HashMap<String, Integer> maleList = new HashMap<String, Integer>();
 		public static HashMap<String, Integer> femaleList = new HashMap<String, Integer>();
 		
-		public HashMap<String, Integer> getList(GENDER gen) {
-			if (gen.equals(MALE))
+		public HashMap<String, Integer> getList() {
+			if (this.equals(MALE))
 				return maleList;
 			else
 				return femaleList;
 		}
 		
 		public double getFrequentcy(String word, GENDER gen) {
-			return getList(gen).get(word)/getList(gen).size();
+			System.out.println(getList().size());
+			return getList().
+					get(word)/
+					getList().
+					size();
 		}
 	};
 
