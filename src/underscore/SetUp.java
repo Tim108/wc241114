@@ -7,6 +7,7 @@ public class SetUp {
 		MALE, FEMALE;
 		public static HashMap<String, Double> maleList = new HashMap<String, Double>();
 		public static HashMap<String, Double> femaleList = new HashMap<String, Double>();
+		public int listSize;
 		
 		public HashMap<String, Double> getList() {
 			if (this.equals(MALE))

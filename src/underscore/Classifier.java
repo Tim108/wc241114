@@ -1,9 +1,15 @@
 package underscore;
 
+import java.util.Iterator;
+
 
 public class Classifier {
+	
+	public Classifier(){
+		fillDB();
+	}
 
-	private boolean showComments = true;
+	private static final boolean showComments = true;
 
 	/**
 	 * 2.1 tokenization This method will strip any punctiation that is mentioned
@@ -28,8 +34,8 @@ public class Classifier {
 	public double p(String w, SetUp.GENDER given) {
 		if (given.getList().containsKey(w)) {
 			double freq = given.getFrequentcy(w, given);
-			int TotNum = given.getList().size();
-			double res = freq / TotNum;
+			
+			double res = freq / given.listSize;
 			return res;
 		} else {
 			return 1;
@@ -85,10 +91,19 @@ public class Classifier {
 
 	public static void insert(String word, double number, SetUp.GENDER gender) {
 		gender.getList().put(word, number);
+
+		Iterator<Double> it = gender.getList().values().iterator();
+		int TotNum = 0;
+		while (it.hasNext()){
+			TotNum += it.next();
+		}
+		gender.listSize = TotNum;
+		if (showComments){
+			System.out.println("ListSize for "+gender.name()+" = "+gender.listSize);
+		}
 	}
 
-	public static void main(String[] args) {
-		Classifier c = new Classifier();
+	public static void fillDB (){
 		insert("male", 5, SetUp.GENDER.MALE);
 		insert("dude", 2, SetUp.GENDER.MALE);
 		insert("herman", 1, SetUp.GENDER.MALE);
@@ -98,6 +113,11 @@ public class Classifier {
 		insert("love", 5, SetUp.GENDER.FEMALE);
 		insert("i", 15, SetUp.GENDER.FEMALE);
 		insert("i", 10, SetUp.GENDER.MALE);
+	}
+	
+	public static void main(String[] args) {
+		Classifier c = new Classifier();
+		fillDB();
 		System.out.println("MALE? "+c.checkGender("Yo Dude, my male henk is fucking herman"));
 		System.out.println("FEMALE? "+c.checkGender("my love is sweet like i am"));
 		System.out.println("MALE? "+c.checkGender("henk has a dude, herman, i love"));
