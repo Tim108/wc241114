@@ -1,7 +1,9 @@
 package underscore;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,7 +15,7 @@ public class AwesomeProgram {
 	
 	private JFrame frame;
 	private JFrame frame2;
-	
+	private JPanel panel;
 	private JLabel l1;
 	private JLabel l2;
 	private JTextArea a1;
@@ -68,6 +70,7 @@ public class AwesomeProgram {
 	            {
 	            	String txt = a1.getText();
 	            	System.out.println(txt);
+	            	c.checkGender(txt);
 	            }
 	        });      
 	 
@@ -76,13 +79,13 @@ public class AwesomeProgram {
 			frame2 = new JFrame();
 			frame2.setBounds(100, 100, 400, 300);
 			frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame2.setLayout(new BorderLayout());
+			frame2.setLayout(new GridLayout(3,1));
 			l2 = new JLabel("This is not manly");
-			frame2.add(l2, BorderLayout.NORTH);
-			b2 = new JButton("You're right");
-			frame2.add(b2, BorderLayout.SOUTH);
+			frame2.add(l2);
+			b2 = new JButton("Das ok");
+			frame2.add(b2);
 			b3 = new JButton("Das bullshit");
-			frame2.add(b3, BorderLayout.SOUTH);
+			frame2.add(b3);
 		}
 	}
 }
