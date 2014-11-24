@@ -1,5 +1,5 @@
 package underscore;
 
-public class Main {
-	
+public class GUI {
+
 }
