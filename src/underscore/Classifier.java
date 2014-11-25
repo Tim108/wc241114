@@ -1,5 +1,6 @@
 package underscore;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -20,7 +21,8 @@ public class Classifier {
 	 *            the sentence
 	 * @return an array of words without punctuation.
 	 */
-	public String[] extract(String data) {
+	public static String[] extract(String data) {
+		data = Normalizer.normalize(data, Normalizer.Form.NFD);
 		return data.replaceAll("[" + SetUp.punctuation + "]", "").toLowerCase()
 				.split(" ");
 	}
@@ -97,7 +99,24 @@ public class Classifier {
 
 	public static void insert(String word, double number, SetUp.GENDER gender) {
 		gender.getList().put(word, number);
+	}
 
+	public static void fillDB (){
+//		insert("male", 5, SetUp.GENDER.MALE);
+//		insert("dude", 2, SetUp.GENDER.MALE);
+//		insert("herman", 1, SetUp.GENDER.MALE);
+//		insert("henk", 1, SetUp.GENDER.MALE);
+//		insert("female", 5, SetUp.GENDER.FEMALE);
+//		insert("ladies", 2, SetUp.GENDER.FEMALE);
+//		insert("love", 5, SetUp.GENDER.FEMALE);
+//		insert("i", 15, SetUp.GENDER.FEMALE);
+//		insert("i", 10, SetUp.GENDER.MALE);
+		SetUp.processTrainingFile("C:\\Users\\Martijn\\Google Drive\\Module 6\\AI - Interactive learner\\blogstrain\\M\\M-train4.txt", SetUp.GENDER.MALE);
+		SetUp.processTrainingFile("C:\\Users\\Martijn\\Google Drive\\Module 6\\AI - Interactive learner\\blogstrain\\F\\F-train1.txt", SetUp.GENDER.FEMALE);
+		prepareCounts(SetUp.GENDER.FEMALE);prepareCounts(SetUp.GENDER.MALE);
+	}
+	
+	public static void prepareCounts (SetUp.GENDER gender){
 		Iterator<Double> it = gender.getList().values().iterator();
 		int TotNum = 0;
 		while (it.hasNext()){
@@ -107,18 +126,6 @@ public class Classifier {
 		SetUp.comment("ListSize for "+gender.name()+" = "+gender.listSize);
 		gender.vocLength = gender.getList().size();
 	}
-
-	public static void fillDB (){
-		insert("male", 5, SetUp.GENDER.MALE);
-		insert("dude", 2, SetUp.GENDER.MALE);
-		insert("herman", 1, SetUp.GENDER.MALE);
-		insert("henk", 1, SetUp.GENDER.MALE);
-		insert("female", 5, SetUp.GENDER.FEMALE);
-		insert("ladies", 2, SetUp.GENDER.FEMALE);
-		insert("love", 5, SetUp.GENDER.FEMALE);
-		insert("i", 15, SetUp.GENDER.FEMALE);
-		insert("i", 10, SetUp.GENDER.MALE);
-	}
 	
 	public static void main(String[] args) {
 		Classifier c = new Classifier();
@@ -127,6 +134,5 @@ public class Classifier {
 		System.out.println("FEMALE? "+c.checkGender("my love is sweet like i am"));
 		System.out.println("MALE? "+c.checkGender("henk has a dude, herman, i love"));
 		System.out.println("???? "+c.checkGender("no idea"));
-		// System.out.println(Arrays.toString(c.extract("hoi Ddit is een toiasf98 Q# Q)M FH#QJ Q(# (FQ FQ#*)R Q#FQ(_JFQ)*VH qhroqnr98 q0wjf h9qhfqja fc1h0qiofejq 9wgr39h 9f7gq3r q9 estje?")));
 	}
 }

@@ -2,6 +2,7 @@ package underscore;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class SetUp {
@@ -37,7 +38,7 @@ public class SetUp {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String line;
 			while ((line = br.readLine()) != null) {
-				text += line + " ";
+				text += line;
 			}
 			br.close();
 		} catch (Exception e) {
@@ -45,6 +46,26 @@ public class SetUp {
 			e.printStackTrace();
 		}
 		return text;
+	}
+	
+	public static void processTrainingFile (String filename, GENDER gen){
+		String text = readTextfile(filename);
+		//First we will extract all the data
+		String[] words = Classifier.extract(text);
+		//Sort words
+		Arrays.sort(words);
+		//Put into map
+		HashMap<String, Double> map = gen.getList();
+		for (String word: words){
+			if (map.containsKey(word)){
+				Double num = map.get(word);
+				map.remove(word);
+				map.put(word, num+1);
+			}
+			else {
+				map.put(word, (double) 1);
+			}
+		}
 	}
 	
 	public static void comment(String comment){
