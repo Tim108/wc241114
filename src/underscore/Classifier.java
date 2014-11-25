@@ -1,5 +1,6 @@
 package underscore;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 
@@ -9,7 +10,7 @@ public class Classifier {
 		fillDB();
 	}
 
-	private static final boolean showComments = true;
+	public static final boolean showComments = true;
 
 	/**
 	 * 2.1 tokenization This method will strip any punctiation that is mentioned
@@ -32,14 +33,13 @@ public class Classifier {
 	 * @return
 	 */
 	public double p(String w, SetUp.GENDER given) {
-		if (given.getList().containsKey(w)) {
-			double freq = given.getFrequentcy(w, given);
-			
-			double res = freq / given.listSize;
+			double C = given.getFrequency(w);
+			double k = 1;
+			double V = given.vocLength;
+			double N = given.listSize;
+			double res = (C+k) / (N+k*V);
+			SetUp.comment("P("+w+"|"+given.name()+")=("+C+"+"+k+") / ("+N+"+"+k+"*"+V+")="+res);
 			return res;
-		} else {
-			return 1;
-		}
 	}
 
 	/**
@@ -58,6 +58,7 @@ public class Classifier {
 				res = res * p(word, given);
 			}
 		}
+		SetUp.comment("Total P("+Arrays.toString(words)+"|"+given.name()+")="+res);
 		double resLog = Math.log(res) / Math.log(2);
 		return resLog;
 	}
@@ -70,21 +71,26 @@ public class Classifier {
 	public SetUp.GENDER checkGender(String data){
 		//prepare data
 		String[] words = extract(data);
+		SetUp.comment("These are the words we will check: "+Arrays.toString(words));
 		//Check first if it is a male
 		double pmale = overallP(words, SetUp.GENDER.MALE);
-		if (showComments ){
-			System.out.println("pmale="+pmale);
-		}
+		SetUp.comment("pmale="+pmale);
+		
 		//Check second if it is a female
 		double pfemale = overallP(words, SetUp.GENDER.FEMALE);
-		if (showComments ){
-			System.out.println("pfemale="+pfemale);
-		}
+		SetUp.comment("pfemale="+pfemale);
+		
 		//Conclude shit
-		if (pmale < pfemale){
+		if (pmale > pfemale){
+			SetUp.comment("It's a manly sentence");
 			return SetUp.GENDER.MALE;
 		}
+		else if (pmale == pfemale){
+			SetUp.comment("It's not a manly nor a female sentence");
+			return null;
+		}
 		else {
+			SetUp.comment("It's a female sentence");
 			return SetUp.GENDER.FEMALE;
 		}
 	}
@@ -98,9 +104,8 @@ public class Classifier {
 			TotNum += it.next();
 		}
 		gender.listSize = TotNum;
-		if (showComments){
-			System.out.println("ListSize for "+gender.name()+" = "+gender.listSize);
-		}
+		SetUp.comment("ListSize for "+gender.name()+" = "+gender.listSize);
+		gender.vocLength = gender.getList().size();
 	}
 
 	public static void fillDB (){

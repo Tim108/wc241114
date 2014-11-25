@@ -9,7 +9,8 @@ public class SetUp {
 		MALE, FEMALE;
 		public static HashMap<String, Double> maleList = new HashMap<String, Double>();
 		public static HashMap<String, Double> femaleList = new HashMap<String, Double>();
-		public int listSize;
+		public double listSize;
+		public double vocLength;
 
 		public HashMap<String, Double> getList() {
 			if (this.equals(MALE))
@@ -18,8 +19,11 @@ public class SetUp {
 				return femaleList;
 		}
 
-		public double getFrequentcy(String word, GENDER gen) {
-			return (getList().get(word) / getList().size());
+		public double getFrequency(String word) {
+			if (this.getList().containsKey(word)) 
+			return getList().get(word);
+			else 
+				return 0;
 		}
 	};
 
@@ -41,5 +45,9 @@ public class SetUp {
 			e.printStackTrace();
 		}
 		return text;
+	}
+	
+	public static void comment(String comment){
+		if (Classifier.showComments){System.out.println(comment);}
 	}
 }
