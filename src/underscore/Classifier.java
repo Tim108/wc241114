@@ -34,13 +34,13 @@ public class Classifier {
 
 		SetUp.comment("The data: "+data);
 		String[] returnData =  data.replaceAll("[" + SetUp.punctuation + "]", "").toLowerCase()
-				.trim().split("\\.");
+				.trim().replaceAll("\\s+", " ").split("\\.");
 		SetUp.comment(Arrays.toString(returnData));
 		return returnData;
 	}
 
 	public static String[] senToWords(String sentence) {
-		String[] returnData = sentence.trim().split(" ");
+		String[] returnData = sentence.trim().replaceAll("\\s+", " ").split(" ");
 		SetUp.comment(Arrays.toString(returnData));
 		return returnData;
 	}
@@ -48,7 +48,7 @@ public class Classifier {
 	public static String[] extractToWords(String data) {
 		data = Normalizer.normalize(data, Normalizer.Form.NFD);
 		String[] returnData = data.replaceAll("[" + SetUp.punctuation + ".]", "").toLowerCase()
-				.trim().split(" ");
+				.trim().replaceAll("\\s+", " ").split(" ");
 		SetUp.comment(Arrays.toString(returnData));
 		return returnData;
 	}
