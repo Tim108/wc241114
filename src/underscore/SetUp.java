@@ -15,6 +15,14 @@ public class SetUp {
 		public double listSize;
 		public double vocLength;
 
+		public GENDER other(){
+			if (this.equals(FEMALE)){
+				return MALE;
+			}
+			else{
+				return FEMALE;
+			}
+		}
 		public HashMap<String, Double> getList() {
 			if (this.equals(MALE))
 				return maleList;

@@ -79,15 +79,25 @@ public class Classifier {
 	 * @return
 	 */
 	public double overallP(String[] words, SetUp.GENDER given) {
-		double res = -1;
+		double Pword = -1;
+		double PwordOther = -1;
+		double Pgiven = given.vocLength;
 		for (String word : words) {
-			if (res == -1) {
-				res = p(word, given);
+			if (Pword == -1) {
+				Pword = p(word, given);
 			} else {
-				res = res * p(word, given);
+				Pword = Pword * p(word, given);
 			}
 		}
-		SetUp.comment("Total P(" + Arrays.toString(words) + "|" + given.name()
+		for (String word : words) {
+			if (PwordOther == -1) {
+				PwordOther = p(word, given.other());
+			} else {
+				PwordOther = Pword * p(word, given.other());
+			}
+		}
+		double res = Pword*Pgiven/(Pword*Pgiven+PwordOther*(1-Pgiven));
+		SetUp.comment("Total P(" + given.name() + "|" + Arrays.toString(words)
 				+ ")=" + res);
 		double resLog = Math.log(res) / Math.log(2);
 		return resLog;
@@ -185,12 +195,15 @@ public class Classifier {
 		// insert("love", 5, SetUp.GENDER.FEMALE);
 		// insert("i", 15, SetUp.GENDER.FEMALE);
 		// insert("i", 10, SetUp.GENDER.MALE);
-		SetUp.processTrainingFile(
-				"C:\\Users\\Martijn\\Google Drive\\Module 6\\AI - Interactive learner\\blogstrain\\M\\M-train4.txt",
-				SetUp.GENDER.MALE);
-		SetUp.processTrainingFile(
-				"C:\\Users\\Martijn\\Google Drive\\Module 6\\AI - Interactive learner\\blogstrain\\F\\F-train1.txt",
-				SetUp.GENDER.FEMALE);
+		String maleFolder = "resources/blogstrain/M/";
+		String femaleFolder = "resources/blogstrain/F/";
+		for (String maleBlogs: SetUp.getFilesInFolder(maleFolder)){
+			SetUp.processTrainingFile(maleFolder+maleBlogs,GENDER.MALE);
+		}
+		for (String femaleBlogs: SetUp.getFilesInFolder(femaleFolder)){
+			SetUp.processTrainingFile(femaleFolder+femaleBlogs,GENDER.FEMALE);
+		}
+		
 		prepareCounts(SetUp.GENDER.FEMALE);
 		prepareCounts(SetUp.GENDER.MALE);
 	}
