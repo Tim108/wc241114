@@ -48,8 +48,14 @@ public class SetUp {
 		return text;
 	}
 	
+	
 	public static void processTrainingFile (String filename, GENDER gen){
 		String text = readTextfile(filename);
+		processTrainingData(text, gen);
+	}
+	
+	public static void processTrainingData (String text, GENDER gen){
+		
 		//First we will extract all the data
 		String[] words = Classifier.extract(text);
 		//Sort words

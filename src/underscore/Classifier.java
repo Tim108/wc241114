@@ -111,8 +111,8 @@ public class Classifier {
 //		insert("love", 5, SetUp.GENDER.FEMALE);
 //		insert("i", 15, SetUp.GENDER.FEMALE);
 //		insert("i", 10, SetUp.GENDER.MALE);
-		SetUp.processTrainingFile("C:\\Users\\Martijn\\Google Drive\\Module 6\\AI - Interactive learner\\blogstrain\\M\\M-train4.txt", SetUp.GENDER.MALE);
-		SetUp.processTrainingFile("C:\\Users\\Martijn\\Google Drive\\Module 6\\AI - Interactive learner\\blogstrain\\F\\F-train1.txt", SetUp.GENDER.FEMALE);
+		SetUp.processTrainingFile("resources/blogstrain/M/M-train4.txt", SetUp.GENDER.MALE);
+		SetUp.processTrainingFile("resources/blogstrain/F/F-train1.txt", SetUp.GENDER.FEMALE);
 		prepareCounts(SetUp.GENDER.FEMALE);prepareCounts(SetUp.GENDER.MALE);
 	}
 	
