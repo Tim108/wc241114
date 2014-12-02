@@ -17,8 +17,6 @@ public class Classifier {
 
 	public static boolean showComments = true;
 	private LinkedList<GENDER> gen = new LinkedList<GENDER>();
-	private int maxWords = 150;
-	private int i = 0;
 	private String wordsPrefix = "Words: ";
 
 	/**
@@ -32,24 +30,24 @@ public class Classifier {
 	public static String[] extract(String data) {
 		data = Normalizer.normalize(data, Normalizer.Form.NFD);
 
-		SetUp.comment("The data: "+data);
+		//SetUp.comment("The data: "+data);
 		String[] returnData =  data.replaceAll("[" + SetUp.punctuation + "]", "").toLowerCase()
 				.trim().replaceAll("\\s+", " ").split("\\.");
-		SetUp.comment(Arrays.toString(returnData));
+		//SetUp.comment(Arrays.toString(returnData));
 		return returnData;
 	}
 
 	public static String[] senToWords(String sentence) {
 		String[] returnData = sentence.trim().replaceAll("\\s+", " ").split(" ");
-		SetUp.comment(Arrays.toString(returnData));
+		//SetUp.comment(Arrays.toString(returnData));
 		return returnData;
 	}
 	
 	public static String[] extractToWords(String data) {
 		data = Normalizer.normalize(data, Normalizer.Form.NFD);
 		String[] returnData = data.replaceAll("[" + SetUp.punctuation + ".]", "").toLowerCase()
-				.trim().replaceAll("\\s+", " ").split(" ");
-		SetUp.comment(Arrays.toString(returnData));
+				.trim().replace("[", "").replace("]", "").replaceAll("\\s+", " ").split(" ");
+		//SetUp.comment(Arrays.toString(returnData));
 		return returnData;
 	}
 
@@ -63,8 +61,8 @@ public class Classifier {
 	public double p(String w, SetUp.GENDER given) {
 		double C = given.getFrequency(w);
 		double k = 1;
-		double V = given.vocLength;
-		double N = given.listSize;
+		double V = given.vocLength+given.other().vocLength;
+		double N = given.listSize+given.other().listSize;
 		double res = (C + k) / (N + k * V);
 		SetUp.comment("P(" + w + "|" + given.name() + ")=(" + C + "+" + k
 				+ ") / (" + N + "+" + k + "*" + V + ")=" + res);
@@ -74,11 +72,18 @@ public class Classifier {
 	/**
 	 * 2.2.1
 	 * 
-	 * @param words
+	 * @param words SINGLE WORDS!! 
 	 * @param given
 	 * @return
 	 */
 	public double overallP(String[] words, SetUp.GENDER given) {
+		comment("Get the P of >"+words+"<");
+		try {
+		for (String word: words){
+			if (word.contains(" ")){
+				throw new Exception("THESE ARE NOT WORDS! This word contains: "+word+". This is one of the "+words.length+" words");
+			}
+		}
 		double Pword = -1;
 		double PwordOther = -1;
 		double Pgiven = given.vocLength;
@@ -101,6 +106,11 @@ public class Classifier {
 				+ ")=" + res);
 		double resLog = Math.log(res) / Math.log(2);
 		return resLog;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
 	}
 
 	/**
@@ -147,7 +157,7 @@ public class Classifier {
 
 			// Conclude shit
 			if (pmale > pfemale) {
-				SetUp.comment("It's a manly sentence");
+				SetUp.comment("It's a manly sentence<<<");
 				return SetUp.GENDER.MALE;
 			} else if (pfemale > pmale){
 				SetUp.comment("It's a female sentence");
@@ -160,7 +170,7 @@ public class Classifier {
 	}
 
 	private String[] getWords(String data) {
-		return extract(data.substring(wordsPrefix.length(), data.length()));
+		return extractToWords(data.substring(wordsPrefix.length(), data.length()));
 	}
 
 	private static void comment(String comment) {
@@ -176,9 +186,11 @@ public class Classifier {
 		comment(gen.toString());
 		Collections.sort(gen);
 		comment(gen.toString());
-		comment(gen.indexOf(GENDER.FEMALE)+"");
-		comment((0.5 * gen.size())+"");
-		return (gen.indexOf(GENDER.FEMALE) > (0.5 * gen.size()));
+		int NRmale = Collections.frequency(gen, GENDER.MALE);
+		int NRfemale = Collections.frequency(gen, GENDER.FEMALE);
+		
+		comment("There are "+NRmale+" male sentences and "+NRfemale+" female sentences");
+		return (NRmale>NRfemale);
 	}
 
 	public static void insert(String word, double number, SetUp.GENDER gender) {
@@ -230,5 +242,6 @@ public class Classifier {
 		System.out.println("MALE? "
 				+ c.checkGender("henk has a dude, herman, i love"));
 		System.out.println("???? " + c.checkGender("no idea"));
+		SetUp.closeLog();
 	}
 }

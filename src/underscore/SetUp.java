@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -104,7 +105,7 @@ public class SetUp {
 	
 	public static void instantiateLog (){
 		try {
-			log = new BufferedWriter(new FileWriter("logfile.txt"));
+			log = new BufferedWriter(new FileWriter("logfile_"+new Date().toString().replace(" ", "_").replace(":", "-")+".txt"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
