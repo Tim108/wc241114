@@ -113,6 +113,7 @@ public class SetUp {
 	}
 	public static void closeLog(){
 		try {
+			if (log != null)
 			log.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

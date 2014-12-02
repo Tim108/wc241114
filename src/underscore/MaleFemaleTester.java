@@ -42,7 +42,7 @@ public class MaleFemaleTester {
 
 	public static void main(String[] args) {
 		MaleFemaleTester test = new MaleFemaleTester();
-		Classifier.showComments = false;
+		Classifier.showComments = true;
 		Classifier.fillDB();
 		String folder = "resources/blogstest/M";
 		String[] files=SetUp.getFilesInFolder(folder);
@@ -80,21 +80,11 @@ public class MaleFemaleTester {
 		int fil = fi.toString().length();
 		//Print shit
 		int l = Math.max(Math.max(fcl, fil),Math.max(mcl, mil));
-		if (l==1){
-			System.out.println(  "  | M | F |" +"\n"
-					+ "M |"+mc+"|"+mi+"\n"
-					+ "F |"+fc+"|"+fi);
-		}
-		else if (l==2){
-			System.out.println(  "  | M | F |" +"\n"
-					+ "M |"+mc+"|"+mi+"\n"
-					+ "F |"+fc+"|"+fi);
-		}
-		else {
-			System.out.println(  "  | M | F |" +"\n"
-					+ "M |"+mc+"|"+mi+"\n"
-					+ "F |"+fc+"|"+fi);
-		}
+		
+			System.out.println(  "  |\tM\t|\tF\t|" +"\n"
+					+ "M |\t"+mc+"\t|\t"+mi+"\n"
+					+ "F |\t"+fi+"\t|\t"+fc);
+		
 	}
 
 	private static void comment(String string) {

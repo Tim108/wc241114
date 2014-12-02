@@ -3,16 +3,20 @@ package underscore;
 import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import underscore.SetUp.GENDER;
 
 public class Classifier {
 
 	public Classifier() {
-		fillDB();
 	}
 
 	public static boolean showComments = true;
@@ -60,7 +64,7 @@ public class Classifier {
 	 */
 	public double p(String w, SetUp.GENDER given) {
 		double C = given.getFrequency(w);
-		double k = 1;
+		double k = 0.000000000000001;
 		double V = given.vocLength+given.other().vocLength;
 		double N = given.listSize+given.other().listSize;
 		double res = (C + k) / (N + k * V);
@@ -219,6 +223,37 @@ public class Classifier {
 		prepareCounts(SetUp.GENDER.FEMALE);
 		prepareCounts(SetUp.GENDER.MALE);
 		comment("Databases are filled.");
+		System.out.println("Coffee in male is"+GENDER.MALE.getList().get("coffee"));
+		System.out.println("Coffee in female is"+GENDER.FEMALE.getList().get("coffee"));
+		System.out.println("Relationship in male is"+GENDER.MALE.getList().get("relationship"));
+		System.out.println("Relationship in female is"+GENDER.FEMALE.getList().get("relationship"));
+		comment(showHashMap(GENDER.MALE.getList()));
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	static Map sortByValue(Map map) {
+	     List list = new LinkedList(map.entrySet());
+	     Collections.sort(list, new Comparator() {
+	          public int compare(Object o1, Object o2) {
+	               return ((Comparable) ((Map.Entry) (o1)).getValue())
+	              .compareTo(((Map.Entry) (o2)).getValue());
+	          }
+	     });
+
+	    Map result = new LinkedHashMap();
+	    for (Iterator it = list.iterator(); it.hasNext();) {
+	        Map.Entry entry = (Map.Entry)it.next();
+	        result.put(entry.getKey(), entry.getValue());
+	    }
+	    return result;
+	} 
+	private static String showHashMap(HashMap<String, Double> list) {
+		list = (HashMap<String, Double>) sortByValue(list);
+		String res = "";
+		for (Entry<String, Double> entry: list.entrySet()){
+			res +=entry.getKey()+" => "+entry.getValue()+"\n";
+		}
+		return res;
 	}
 
 	public static void prepareCounts(SetUp.GENDER gender) {
