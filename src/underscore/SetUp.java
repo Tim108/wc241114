@@ -76,9 +76,13 @@ public class SetUp {
 		}
 		return listOfFilenames;
 	}
-
-	public static void processTrainingFile(String filename, GENDER gen) {
+	
+	public static void processTrainingFile(String filename, GENDER gen){
 		String text = readTextfile(filename);
+		processTrainingData(text,gen);
+	}
+	
+	public static void processTrainingData(String text, GENDER gen) {
 		// First we will extract all the data
 		String[] words = Classifier.extractToWords(text);
 		// Sort words
