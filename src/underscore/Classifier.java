@@ -149,12 +149,12 @@ public class Classifier {
 			if (pmale > pfemale) {
 				SetUp.comment("It's a manly sentence");
 				return SetUp.GENDER.MALE;
-			} else if (pmale == pfemale) {
-				SetUp.comment("It's not a manly nor a female sentence");
-				return GENDER.UNKNOWN;
-			} else {
+			} else if (pfemale > pmale){
 				SetUp.comment("It's a female sentence");
 				return SetUp.GENDER.FEMALE;
+			} else {
+				SetUp.comment("It's not a manly nor a female sentence");
+				return GENDER.UNKNOWN;
 			}
 		}
 	}
@@ -163,7 +163,7 @@ public class Classifier {
 		return extract(data.substring(wordsPrefix.length(), data.length()));
 	}
 
-	private void comment(String comment) {
+	private static void comment(String comment) {
 		SetUp.comment(comment);
 		
 	}
@@ -173,11 +173,11 @@ public class Classifier {
 	}
 
 	private boolean majorityOf(List<GENDER> gen, GENDER male) {
-		System.out.println(gen);
+		comment(gen.toString());
 		Collections.sort(gen);
-		System.out.println(gen);
-		System.out.println(gen.indexOf(GENDER.FEMALE));
-		System.out.println((0.5 * gen.size()));
+		comment(gen.toString());
+		comment(gen.indexOf(GENDER.FEMALE)+"");
+		comment((0.5 * gen.size())+"");
 		return (gen.indexOf(GENDER.FEMALE) > (0.5 * gen.size()));
 	}
 
@@ -206,6 +206,7 @@ public class Classifier {
 		
 		prepareCounts(SetUp.GENDER.FEMALE);
 		prepareCounts(SetUp.GENDER.MALE);
+		comment("Databases are filled.");
 	}
 
 	public static void prepareCounts(SetUp.GENDER gender) {

@@ -1,8 +1,11 @@
 package underscore;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -65,10 +68,10 @@ public class SetUp {
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				comment("File " + listOfFiles[i].getName()+" is read ("+listOfFiles[i].getPath()+")");
+				//comment("File " + listOfFiles[i].getName()+" is read ("+listOfFiles[i].getPath()+")");
 				listOfFilenames[i]=listOfFiles[i].getName();
 			} else if (listOfFiles[i].isDirectory()) {
-				comment("Directory " + listOfFiles[i].getName()+"is not read, please remove any directories.");
+				//comment("Directory " + listOfFiles[i].getName()+"is not read, please remove any directories.");
 			}
 		}
 		return listOfFilenames;
@@ -93,9 +96,38 @@ public class SetUp {
 		}
 	}
 
+	private static BufferedWriter log;
+	
+	public static void instantiateLog (){
+		try {
+			log = new BufferedWriter(new FileWriter("logfile.txt"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void closeLog(){
+		try {
+			log.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public static void comment(String comment) {
 		if (Classifier.showComments) {
 			System.out.println(comment);
+			try {
+				if (log == null){
+					instantiateLog();
+				}
+				log.newLine();
+				log.write(comment);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

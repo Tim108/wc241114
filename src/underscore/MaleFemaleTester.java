@@ -33,7 +33,13 @@ public class MaleFemaleTester {
 			test.test(folder+"//"+file, SetUp.GENDER.MALE);
 		//}
 		if (test.numberOfTests > 0)
-		System.out.println("There were "+test.numberOfCorrectResults+" tests that were succesfull (out of "+test.numberOfTests+"). This is "+((test.numberOfCorrectResults/test.numberOfTests)*100)+"%.");
+		comment("There were "+test.numberOfCorrectResults+" tests that were succesfull (out of "+test.numberOfTests+"). This is "+((test.numberOfCorrectResults/test.numberOfTests)*100)+"%.");
+		SetUp.closeLog();
+	}
+
+	private static void comment(String string) {
+		// TODO Auto-generated method stub
+		SetUp.comment(string);
 	}
 
 }
