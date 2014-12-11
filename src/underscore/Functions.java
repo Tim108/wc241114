@@ -159,7 +159,7 @@ public class Functions {
 
 	public String maxLenght(String sentence) {
 		if (sentence.length() > 20){
-			return sentence.substring(0, 10)+""+sentence.substring(sentence.length()-10);
+			return sentence.substring(0, 10)+" ... "+sentence.substring(sentence.length()-10);
 		}
 		else {
 			return sentence;
