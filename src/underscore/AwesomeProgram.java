@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import dump.Classifier;
+import dump.SetUp;
+
 public class AwesomeProgram {
 
 	private Classifier c = new Classifier();
