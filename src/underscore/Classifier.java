@@ -53,8 +53,12 @@ public class Classifier extends Functions {
 		double PMale = overallP(sentence, GENDER.MALE);
 		double PFemale = overallP(sentence, GENDER.FEMALE);
 		if (PMale > PFemale) {
+			comment("P(Male)= " + PMale);
+			comment("P(Female)= " + PFemale);
 			return GENDER.MALE;
 		} else if (PMale < PFemale) {
+			comment("P(Male)= " + PMale);
+			comment("P(Female)= " + PFemale);
 			return GENDER.FEMALE;
 		} else {
 			i++;

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -182,5 +183,31 @@ public class Functions {
 				.trim().replace("[", "").replace("]", "").replaceAll("\\s+", " ").split(" ");
 		//SetUp.comment(Arrays.toString(returnData));
 		return returnData;
+	}
+	
+
+	
+	
+	public void processTrainingFile(String filename, GENDER gen){
+		String text = readTextfile(filename);
+		processTrainingData(text,gen);
+	}
+	
+	public void processTrainingData(String text, GENDER gen) {
+		// First we will extract all the data
+		String[] words = extractToWords(text);
+		// Sort words
+		Arrays.sort(words);
+		// Put into map
+		HashMap<String, Double> map = gen.getList();
+		for (String word : words) {
+			if (map.containsKey(word)) {
+				Double num = map.get(word);
+				map.remove(word);
+				map.put(word, num + 1);
+			} else {
+				map.put(word, (double) 1);
+			}
+		}
 	}
 }

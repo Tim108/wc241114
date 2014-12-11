@@ -9,10 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import dump.Classifier;
-import dump.SetUp;
-
-public class AwesomeProgram {
+public class AwesomeProgram extends Functions{
 
 	private Classifier c = new Classifier();
 	
@@ -27,7 +24,7 @@ public class AwesomeProgram {
 	private JButton b3;
 	
 	private String lastTxt = "";
-	private SetUp.GENDER lastGender;
+	private GENDER lastGender;
 
 	/**
 	 * Launch the application.
@@ -37,7 +34,6 @@ public class AwesomeProgram {
 			public void run() {
 				try {
 					AwesomeProgram window = new AwesomeProgram();
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,6 +45,22 @@ public class AwesomeProgram {
 	 * Create the application.
 	 */
 	public AwesomeProgram() {
+		String dirBlogstrainM = "resources/blogstrain/M";
+		String dirBlogstrainF = "resources/blogstrain/F";
+		String dirSpamtrainHam = "resources/spamtrain/ham";
+		String dirSpamtrainSpam = "resources/spamtrain/spam";
+		String dirTesttrainM = "resources/testje/HAM";
+		String dirTesttrainF = "resources/testje/SPAM";
+
+		String dirBlogstestM = "resources/blogstest/M";
+		String dirBlogstestF = "resources/blogstest/F";
+		String dirSpamtestHam = "resources/spamtest/ham";
+		String dirSpamtestSpam = "resources/spamtest/spam";
+		String dirTesttestM = "resources/testje";
+		String dirTesttestF = "resources/testje";
+		
+		new Trainer(dirBlogstrainM, dirBlogstrainF);
+		
 		initializeIn();
 	}
 	
@@ -71,12 +83,14 @@ public class AwesomeProgram {
             {	
             	l2.setText("banaantjes");
             	String lastTxt = a1.getText();
+            	System.out.println("Check this text: "+lastTxt);
             	lastGender = c.checkGender(lastTxt);
+            	System.out.println("This is the gender("+lastGender+") for this text: "+lastTxt);
             	
-            	if(lastGender == SetUp.GENDER.MALE){
+            	if(lastGender == GENDER.MALE){
             		System.out.println("1");
             		initializeOut("That is a male sentence.");
-            	}else if(lastGender == SetUp.GENDER.FEMALE){
+            	}else if(lastGender == GENDER.FEMALE){
             		System.out.println("2");
             		initializeOut("That is a female sentence.");
             	}else{
@@ -102,7 +116,7 @@ public class AwesomeProgram {
             {	
             	if(lastGender != null){
             	//program was right
-            	SetUp.processTrainingData(lastTxt, lastGender);
+            	processTrainingData(lastTxt, lastGender);
             	System.out.println("ok");
             	frame2.dispose();
             	}
@@ -116,7 +130,7 @@ public class AwesomeProgram {
             {
             	if(lastGender != null){
             	//program was not right
-            	SetUp.processTrainingData(lastTxt, lastGender.other());
+            	processTrainingData(lastTxt, lastGender.other());
             	System.out.println("not ok");
             	frame2.dispose();
             	}
