@@ -19,12 +19,13 @@ public class Classifier extends Functions {
 		double C = given.getFrequency(w);
 		double V = 2;// given.vocLength+given.other().vocLength;
 		double N = given.listSize + given.other().listSize;
-		double res = (C + k) / (N + k * V);
-		if (Double.isNaN(res)){
-		comment("P(" + w + "|" + given.name() + ")=(" + C + "+" + k
-		 + ") / (" + N + "+" + k + "*" + V + ")=" + res);
-		}
-		return Math.log(res) / Math.log(2);
+		double res = (C + k) / (N + (k * V));
+		//if (Double.isNaN(res) || Double.isInfinite(res)){
+		comment(">> P(" + w + "|" + given.name() + ")=(" + C + "+" + k
+		 + ") / (" + N + "+" + k + "*" + V + ")=" + res +" = "+Math.log(res) / Math.log(2) );
+		//}
+		//return Math.log(res) / Math.log(2);
+		return res;
 	}
 
 	public double overallP(String sentence, GENDER given) {
@@ -35,11 +36,11 @@ public class Classifier extends Functions {
 			PwordsGiven *= p(word, given); //Dit wordt nu -Infinity, daarom krijgen we een NaN
 			PwordsOther *= p(word, given.other());//Dit wordt nu -Infinity, daarom krijgen we een NaN
 		}
-		double res = Math.log(PwordsGiven
+		double res = PwordsGiven
 				* given.prior
 				/ (PwordsGiven * given.prior + PwordsOther
-						* given.other().prior))
-				/ Math.log(2);
+						* given.other().prior)
+				;
 		if (Double.isNaN(res)){
 			comment("P(" + given.name() + "|" + maxLenght(sentence)+ ")="+PwordsGiven+
 				"*"+ given.prior+
