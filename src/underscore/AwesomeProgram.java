@@ -68,8 +68,9 @@ public class AwesomeProgram {
             {	
             	l2.setText("banaantjes");
             	String lastTxt = a1.getText();
+            	a1.setText("");
             	lastGender = c.checkGender(lastTxt);
-            	
+            	System.out.println(lastGender);
             	if(lastGender == SetUp.GENDER.MALE){
             		System.out.println("1");
             		initializeOut("That is a male sentence.");
