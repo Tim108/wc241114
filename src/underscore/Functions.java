@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class Functions {
-	public final String punctuation = "(){},;!?<>%" + "'\"*#_.";
+	//public final char[] punctuation = "(){},;!?<>%'\"*#_.".toCharArray();
+	private final String[] punctuation = {"\\(", "\\)", "\\{", "\\}", "\\,", ";", "!", "\\?", "<", ">", "\\%", "\\'", "\\\\", "/", "\"", "\\*", "#", "_", "."};
 	private static BufferedWriter log;
 	public static final double k = 1;
 	public static final boolean useRandom = false;
@@ -179,8 +180,10 @@ public class Functions {
 	//DEZE FUNCTIE IS NOG OUD
 	public String[] extractToWords(String data) {
 		data = Normalizer.normalize(data, Normalizer.Form.NFD);
-		String[] returnData = data.replaceAll("[" + punctuation + ".]", "").toLowerCase()
-				.trim().replace("[", "").replace("]", "").replaceAll("\\s+", " ").split(" ");
+		for(String punc : punctuation){
+			data = data.replaceAll(punc, "");
+		}
+		String[] returnData = data.toLowerCase().trim().split("");
 		//SetUp.comment(Arrays.toString(returnData));
 		return returnData;
 	}

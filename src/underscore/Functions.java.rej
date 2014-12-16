@@ -1,0 +1,10 @@
+diff a/src/underscore/Functions.java b/src/underscore/Functions.java	(rejected hunks)
+@@ -16,7 +16,7 @@
+ import java.util.Map.Entry;
+ 
+ public class Functions {
+-	public final String punctuation = "(){},;!?<>%" + "'\"*#_.";
++	public final String punctuation = "(){},;!?<>%" + "'\"*#_.&";
+ 	private static BufferedWriter log;
+ 	public static final double k = 1;
+ 	public static final boolean useRandom = false;
