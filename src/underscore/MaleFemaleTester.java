@@ -1,95 +1,117 @@
 package underscore;
 
 import java.util.HashMap;
-
-import underscore.SetUp.GENDER;
-
-public class MaleFemaleTester {
+/**
+ * 
+ * @author Martijn Willemsen & Tim Sonderen
+ * 
+ * Class that contains the main program of the classifier.
+ *
+ */
+public class MaleFemaleTester extends Functions {
 
 	private Classifier c;
 	private int numberOfTests = 0;
 	private int numberOfCorrectResults = 0;
-	private int numberOfFalseResults = 0;
-	//The first GENDER is how it should be classified, and the second how many are classified like that
+	// The first GENDER is how it should be classified, and the second how many
+	// are classified like that
 	private static HashMap<GENDER, Integer> testCorrectResults = new HashMap<GENDER, Integer>();
 	private static HashMap<GENDER, Integer> testWrongResults = new HashMap<GENDER, Integer>();
-	public MaleFemaleTester() {
-	}
 	
-	public boolean test (String filename, SetUp.GENDER gender){
+	/**
+	 * Executes the tests with a confusion matrix at the end.
+	 * @param filename
+	 * @param gender
+	 * @return
+	 */
+	public boolean test(String filename, GENDER gender) {
 		c = new Classifier();
 		numberOfTests++;
-		GENDER gen = c.checkGender(SetUp.readTextfile(filename));
-		comment("+++++ THE GENDER: "+gen+" equals to: "+gender);
+		GENDER gen = c.checkGender(readTextfile(filename));
+		comment("The classifier predicted this gender: " + gen
+				+ ". This is the correct gender: " + gender);
 		if (gender.equals(gen)) {
 			numberOfCorrectResults++;
-			testCorrectResults.put(gender, notNULL(testCorrectResults.get(gender))+1);
+			testCorrectResults.put(gender,
+					notNULL(testCorrectResults.get(gender)) + 1);
 			return true;
-		}
-		else {
-			numberOfFalseResults++;
-			testWrongResults.put(gender, notNULL(testWrongResults.get(gender))+1);
+		} else {
+			testWrongResults.put(gender,
+					notNULL(testWrongResults.get(gender)) + 1);
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Makes sure given integer is not null.
+	 * @param integer
+	 * @return Returns given integer or 0.
+	 */
 	private static int notNULL(Integer integer) {
-		if (integer==null)
+		if (integer == null)
 			return 0;
-		else 
+		else
 			return integer;
 	}
-
+	
+	/**
+	 * Launch application for testing without a GUI.
+	 * Contains selection of which training and testing files to use.
+	 * @param args
+	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
+		String dirBlogstrainM = "resources/blogstrain/M";
+		String dirBlogstrainF = "resources/blogstrain/F";
+		String dirSpamtrainHam = "resources/spamtrain/ham";
+		String dirSpamtrainSpam = "resources/spamtrain/spam";
+
+		String dirBlogstestM = "resources/blogstest/M";
+		String dirBlogstestF = "resources/blogstest/F";
+		String dirSpamtestHam = "resources/spamtest/ham";
+		String dirSpamtestSpam = "resources/spamtest/spam";
+
+		new Trainer(dirBlogstrainM, dirBlogstrainF);
 		MaleFemaleTester test = new MaleFemaleTester();
-		Classifier.showComments = true;
-		Classifier.fillDB();
-		String folder = "resources/blogstest/M";
-		String[] files=SetUp.getFilesInFolder(folder);
-		for(String file: files){
-			test.test(folder+"//"+file, SetUp.GENDER.MALE);
+
+		String folder = dirBlogstestM;
+		String[] files = test
+				.removeNullFromArray(test.getFilesInFolder(folder));
+		for (String file : files) {
+			test.test(folder + "//" + file, GENDER.MALE);
 		}
-		folder = "resources/blogstest/F";
-		files=SetUp.getFilesInFolder(folder);
-		for(String file: files){
-			test.test(folder+"//"+file, SetUp.GENDER.FEMALE);
+		folder = dirBlogstestF;
+		files = test.removeNullFromArray(test.getFilesInFolder(folder));
+		for (String file : files) {
+			test.test(folder + "//" + file, GENDER.FEMALE);
 		}
-		if (test.numberOfTests > 0)
-		comment("There were "+test.numberOfCorrectResults+" tests that were succesfull (out of "+test.numberOfTests+"). This is "+((test.numberOfCorrectResults/test.numberOfTests)*100)+"%.");
-		
-		//testCorrectResults.put(GENDER.MALE, 5);
-		//testCorrectResults.put(GENDER.FEMALE, 15);
-		//testWrongResults.put(GENDER.MALE, 25);
-		//testWrongResults.put(GENDER.FEMALE, 35);
+		if (test.numberOfTests > 0) {
+			double prc = ((double) ((double) test.numberOfCorrectResults / (double) test.numberOfTests)) * 100;
+			showComments = true;
+			comment("There were " + test.numberOfCorrectResults
+					+ " tests that were succesfull (out of "
+					+ test.numberOfTests + "). This is " + prc + "%.");
+			showComments = false;
+		}
 		confusionMatrix();
-		SetUp.closeLog();
+		closeLog();
 	}
 
+	/**
+	 * Creates confusion matrix.
+	 */
 	private static void confusionMatrix() {
-		//Get MALE correct
+		// Get MALE correct
 		Integer mc = notNULL(testCorrectResults.get(GENDER.MALE));
-		int mcl = mc.toString().length();
-		//Get MALE incorrect
+		// Get MALE incorrect
 		Integer mi = notNULL(testWrongResults.get(GENDER.MALE));
-		int mil = mi.toString().length();
-		//Get FEMALE correct
+		// Get FEMALE correct
 		Integer fc = notNULL(testCorrectResults.get(GENDER.FEMALE));
-		int fcl = fc.toString().length();
-		//Get FEMALE incorrect
+		// Get FEMALE incorrect
 		Integer fi = notNULL(testWrongResults.get(GENDER.FEMALE));
-		int fil = fi.toString().length();
-		//Print shit
-		int l = Math.max(Math.max(fcl, fil),Math.max(mcl, mil));
-		
-			System.out.println(  "  |\tM\t|\tF\t|" +"\n"
-					+ "M |\t"+mc+"\t|\t"+mi+"\n"
-					+ "F |\t"+fi+"\t|\t"+fc);
-		
-	}
+		System.out.println("  |\tM\t|\tF\t|" + "\n" + "M |\t" + mc + "\t|\t"
+				+ mi + "\n" + "F |\t" + fi + "\t|\t" + fc);
 
-	private static void comment(String string) {
-		// TODO Auto-generated method stub
-		SetUp.comment(string);
 	}
 
 }

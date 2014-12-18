@@ -1,7 +1,6 @@
 package underscore;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -9,13 +8,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class AwesomeProgram {
+public class AwesomeProgram extends Functions{
 
 	private Classifier c = new Classifier();
 	
 	private JFrame frame;
 	private JFrame frame2;
-	private JPanel panel;
 	private JLabel l1;
 	private JLabel l2 = new JLabel("Initializing");
 	private JTextArea a1;
@@ -24,17 +22,16 @@ public class AwesomeProgram {
 	private JButton b3;
 	
 	private String lastTxt = "";
-	private SetUp.GENDER lastGender;
+	private GENDER lastGender;
 
 	/**
-	 * Launch the application.
+	 * Launch the application with a GUI.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AwesomeProgram window = new AwesomeProgram();
-					
+					new AwesomeProgram();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -43,14 +40,33 @@ public class AwesomeProgram {
 	}
 
 	/**
-	 * Create the application.
+	 * Create the application window.
 	 */
+	@SuppressWarnings("unused")
 	public AwesomeProgram() {
+		String dirBlogstrainM = "resources/blogstrain/M";
+		String dirBlogstrainF = "resources/blogstrain/F";
+		String dirSpamtrainHam = "resources/spamtrain/ham";
+		String dirSpamtrainSpam = "resources/spamtrain/spam";
+		String dirTesttrainM = "resources/testje/HAM";
+		String dirTesttrainF = "resources/testje/SPAM";
+
+		String dirBlogstestM = "resources/blogstest/M";
+		String dirBlogstestF = "resources/blogstest/F";
+		String dirSpamtestHam = "resources/spamtest/ham";
+		String dirSpamtestSpam = "resources/spamtest/spam";
+		String dirTesttestM = "resources/testje";
+		String dirTesttestF = "resources/testje";
+		
+		new Trainer(dirBlogstrainM, dirBlogstrainF);
+		
 		initializeIn();
 	}
 	
+	/**
+	 * Initialize input window.
+	 */
 	private void initializeIn(){
-
 		//input frame
 		frame = new JFrame();
 		frame.setBounds(100, 100, 400, 300);
@@ -64,21 +80,16 @@ public class AwesomeProgram {
 		frame.add(b1, BorderLayout.SOUTH);
 		b1.addActionListener(new ActionListener() {
 			 
-            public void actionPerformed(ActionEvent e)
-            {	
-            	l2.setText("banaantjes");
-            	String lastTxt = a1.getText();
-            	a1.setText("");
+            public void actionPerformed(ActionEvent e){	
+            	lastTxt = a1.getText();
             	lastGender = c.checkGender(lastTxt);
-            	System.out.println(lastGender);
-            	if(lastGender == SetUp.GENDER.MALE){
-            		System.out.println("1");
+            	a1.setText("");
+            	
+            	if(lastGender == GENDER.MALE){
             		initializeOut("That is a male sentence.");
-            	}else if(lastGender == SetUp.GENDER.FEMALE){
-            		System.out.println("2");
+            	}else if(lastGender == GENDER.FEMALE){
             		initializeOut("That is a female sentence.");
             	}else{
-            		System.out.println("3");
             		initializeOut("No gender found");
             	}
             }
@@ -86,6 +97,10 @@ public class AwesomeProgram {
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Initialize the output window.
+	 * @param txt
+	 */
 	private void initializeOut(String txt){
 		//output frame
 		frame2 = new JFrame();
@@ -100,7 +115,7 @@ public class AwesomeProgram {
             {	
             	if(lastGender != null){
             	//program was right
-            	SetUp.processTrainingData(lastTxt, lastGender);
+            	new Trainer(lastTxt, lastGender);
             	System.out.println("ok");
             	frame2.dispose();
             	}
@@ -114,7 +129,7 @@ public class AwesomeProgram {
             {
             	if(lastGender != null){
             	//program was not right
-            	SetUp.processTrainingData(lastTxt, lastGender.other());
+            	new Trainer(lastTxt, lastGender.other());
             	System.out.println("not ok");
             	frame2.dispose();
             	}
