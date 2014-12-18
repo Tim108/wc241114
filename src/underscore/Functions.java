@@ -82,18 +82,18 @@ public class Functions {
 	    return list.toArray(new String[list.size()]);
 	}
 
-	public double calculatePrior(GENDER given) {
+	/*public double calculatePrior(GENDER given) {
 		prepareCounts(given);
 		double C = given.listSize;
 		double k = 1;
-		double V = given.vocLength+given.other().vocLength;
-		double N = given.listSize+given.other().listSize;
+		double V = 2;
+		double N = given.vocLength;
 		double res = (C + k) / (N + k * V);
 		comment("P("+given.name() + ")=(" + C + "+" + k
 				+ ") / (" + N + "+" + k + "*" + V + ")=" + res);
 		given.prior=res;
 		return res;
-	}
+	}*/
 	
 	public void prepareCounts(GENDER gender) {
 		Iterator<Double> it = gender.getList().values().iterator();
@@ -103,7 +103,10 @@ public class Functions {
 		}
 		gender.listSize = TotNum;
 		comment("NumberOfWords for " + gender.name() + " = " + gender.listSize);
-		gender.vocLength = gender.getList().size();
+		gender.vocLength = 0;
+		for(double i : gender.getList().values()){
+			gender.vocLength += i;
+		}
 		comment("NumberOfDIFFERENTWords for " + gender.name() + " = " + gender.vocLength);
 		
 	}

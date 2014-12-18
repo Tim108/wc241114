@@ -28,7 +28,9 @@ public class Trainer extends Functions {
 		comment("The female dictionary: "+showHashMap(GENDER.FEMALE.getList()));
 		
 		//Now calculate the prior probabilities
-		calculatePrior(GENDER.MALE);
-		calculatePrior(GENDER.FEMALE);
+//		calculatePrior(GENDER.MALE);
+//		calculatePrior(GENDER.FEMALE);
+		prepareCounts(GENDER.MALE);
+		prepareCounts(GENDER.FEMALE);
 	}
 }

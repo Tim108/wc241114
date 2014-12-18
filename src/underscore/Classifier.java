@@ -17,34 +17,28 @@ public class Classifier extends Functions {
 	 */
 	public double p(String w, GENDER given) {
 		double C = given.getFrequency(w);
-		double V = 2;// given.vocLength+given.other().vocLength;
-		double N = given.listSize + given.other().listSize;
-		double res = (C + k) / (N + (k * V));
-		if (Double.isNaN(res) || Double.isInfinite(res)){
-			System.out.println("res =" + res);
-		// comment(">> P(" + w + "|" + given.name() + ")=(" + C + "+" + k
-		// + ") / (" + N + "+" + k + "*" + V + ")=" + res +" = "+Math.log(res) /
-		// Math.log(2) + "-->" + res );
-		}
-		// return Math.log(res) / Math.log(2);
-		return res;
+		double V = given.listSize;// given.vocLength+given.other().vocLength;
+		double N = given.vocLength;
+		double res = Math.log((float)(C+k)) - Math.log((float)(N + (k*V)));
+		System.out.println("c = " + C + " | v = " + V + " | n = " + N + " | res = " + res);
+		return res / Math.log(2);
+		//return res;
 	}
 
 	public double overallP(String sentence, GENDER given) {
 		String[] words = extractToWords(sentence);
-		double PwordsGiven = 1;
-		double PwordsOther = 1;
+		float PwordsGiven = 1;
 		for (String word : words) {
 			if (word != null) {
-				PwordsGiven *= Math.log(p(word, given))/Math.log(500);
+				PwordsGiven += p(word, given);
 				//PwordsOther *= Math.log(p(word, given.other()))/Math.log(1000);
 				//System.out.println("##########" + PwordsGiven + "-----" + PwordsOther);
 			}
 			
 		}
-		System.out.println("~~~~~~~~~~" + given.name() + PwordsGiven + "-----" + given.other().name() + PwordsOther);
-		double res = PwordsGiven
-				* given.prior;
+		System.out.println("~~~~~~~~~~" + given.name() + PwordsGiven);
+		float res = PwordsGiven;
+				//* (Math.log(given.prior) / Math.log(500));
 				/*/ (PwordsGiven * given.prior + PwordsOther
 						* given.other().prior);*/
 		if (Double.isNaN(res)) {

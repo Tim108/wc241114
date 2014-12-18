@@ -56,15 +56,15 @@ public class MaleFemaleTester extends Functions {
 		String dirTesttestM = "resources/testje";
 		String dirTesttestF = "resources/testje";
 		
-		new Trainer(dirSpamtrainHam, dirSpamtrainSpam);
+		new Trainer(dirBlogstrainM, dirBlogstrainF);
 		MaleFemaleTester test = new MaleFemaleTester();
 		
-		String folder = dirSpamtestHam;
+		String folder = dirBlogstestM;
 		String[] files=test.removeNullFromArray(test.getFilesInFolder(folder));
 		for(String file: files){
 			test.test(folder+"//"+file, GENDER.MALE);
 		}
-		folder = dirSpamtestSpam;
+		folder = dirBlogstestF;
 		files=test.removeNullFromArray(test.getFilesInFolder(folder));
 		for(String file: files){
 			test.test(folder+"//"+file, GENDER.FEMALE);
