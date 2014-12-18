@@ -25,7 +25,7 @@ public class AwesomeProgram extends Functions{
 	private GENDER lastGender;
 
 	/**
-	 * Launch the application.
+	 * Launch the application with a GUI.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -40,7 +40,7 @@ public class AwesomeProgram extends Functions{
 	}
 
 	/**
-	 * Create the application.
+	 * Create the application window.
 	 */
 	@SuppressWarnings("unused")
 	public AwesomeProgram() {
@@ -63,8 +63,10 @@ public class AwesomeProgram extends Functions{
 		initializeIn();
 	}
 	
+	/**
+	 * Initialize input window.
+	 */
 	private void initializeIn(){
-
 		//input frame
 		frame = new JFrame();
 		frame.setBounds(100, 100, 400, 300);
@@ -78,22 +80,16 @@ public class AwesomeProgram extends Functions{
 		frame.add(b1, BorderLayout.SOUTH);
 		b1.addActionListener(new ActionListener() {
 			 
-            public void actionPerformed(ActionEvent e)
-            {	
-            	l2.setText("banaantjes");
-            	String lastTxt = a1.getText();
-            	System.out.println("Check this text: "+lastTxt);
+            public void actionPerformed(ActionEvent e){	
+            	lastTxt = a1.getText();
             	lastGender = c.checkGender(lastTxt);
-            	System.out.println("This is the gender("+lastGender+") for this text: "+lastTxt);
+            	a1.setText("");
             	
             	if(lastGender == GENDER.MALE){
-            		System.out.println("1");
             		initializeOut("That is a male sentence.");
             	}else if(lastGender == GENDER.FEMALE){
-            		System.out.println("2");
             		initializeOut("That is a female sentence.");
             	}else{
-            		System.out.println("3");
             		initializeOut("No gender found");
             	}
             }
@@ -101,6 +97,10 @@ public class AwesomeProgram extends Functions{
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Initialize the output window.
+	 * @param txt
+	 */
 	private void initializeOut(String txt){
 		//output frame
 		frame2 = new JFrame();
@@ -115,7 +115,7 @@ public class AwesomeProgram extends Functions{
             {	
             	if(lastGender != null){
             	//program was right
-            	processTrainingData(lastTxt, lastGender);
+            	new Trainer(lastTxt, lastGender);
             	System.out.println("ok");
             	frame2.dispose();
             	}
@@ -129,7 +129,7 @@ public class AwesomeProgram extends Functions{
             {
             	if(lastGender != null){
             	//program was not right
-            	processTrainingData(lastTxt, lastGender.other());
+            	new Trainer(lastTxt, lastGender.other());
             	System.out.println("not ok");
             	frame2.dispose();
             	}

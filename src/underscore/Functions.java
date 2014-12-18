@@ -13,22 +13,40 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 
+/**
+ * 
+ * @author Martijn Willemsen & Tim Sonderen
+ * 
+ * Class that contains help functions for the other classes.
+ *
+ */
 public class Functions {
 	private static BufferedWriter log;
 	public static final double k = 0.01;
 	public static final boolean useRandom = true;
 	public static boolean showComments = false;
-
+	
+	/**
+	 * 
+	 * @author T
+	 * 
+	 * Enum for the gender.
+	 * Is either male, female or unknown.
+	 * Also contains list size, vocabulary size of the gender.
+	 *
+	 */
 	public static enum GENDER {
 		MALE, FEMALE, UNKNOWN;
 		public static HashMap<String, Double> maleList = new HashMap<String, Double>();
 		public static HashMap<String, Double> femaleList = new HashMap<String, Double>();
 		public double listSize;
 		public double vocLength;
-		public double prior;
-
+		
+		/**
+		 * 
+		 * @return Returns Female if called on Male and Male if called on Female.
+		 */
 		public GENDER other() {
 			if (this.equals(FEMALE)) {
 				return MALE;
@@ -36,14 +54,23 @@ public class Functions {
 				return FEMALE;
 			}
 		}
-
+		
+		/**
+		 * 
+		 * @return List of words for the gender it is called up on.
+		 */
 		public HashMap<String, Double> getList() {
 			if (this.equals(MALE))
 				return maleList;
 			else
 				return femaleList;
 		}
-
+		
+		/**
+		 * 
+		 * @param word Word of which the occurrence frequency should be returned.
+		 * @return Returns how many times the word occurs in the dictionary.
+		 */
 		public double getFrequency(String word) {
 			if (this.getList().containsKey(word))
 				return getList().get(word);
@@ -51,7 +78,12 @@ public class Functions {
 				return 0;
 		}
 	};
-
+	
+	/**
+	 * 
+	 * @param foldername Target folder.
+	 * @return Returns all files in given folder.
+	 */
 	public String[] getFilesInFolder(String foldername) {
 		File folder = new File(foldername);
 		File[] listOfFiles = folder.listFiles();
@@ -64,7 +96,12 @@ public class Functions {
 		}
 		return listOfFilenames;
 	}
-
+	
+	/**
+	 * 
+	 * @param firstArray
+	 * @return Returns same array but without null's.
+	 */
 	public String[] removeNullFromArray(String[] firstArray) {
 		List<String> list = new ArrayList<String>();
 
@@ -76,7 +113,11 @@ public class Functions {
 
 		return list.toArray(new String[list.size()]);
 	}
-
+	
+	/**
+	 * Initializes the variables for the enum GENDER.
+	 * @param gender
+	 */
 	public void prepareCounts(GENDER gender) {
 		Iterator<Double> it = gender.getList().values().iterator();
 		int TotNum = 0;
@@ -93,7 +134,12 @@ public class Functions {
 				+ gender.vocLength);
 
 	}
-
+	
+	/**
+	 * Read given text file.
+	 * @param file
+	 * @return Returns the text that is in the file.
+	 */
 	public String readTextfile(String file) {
 		String text = "";
 		try {
@@ -108,7 +154,10 @@ public class Functions {
 		}
 		return text;
 	}
-
+	
+	/**
+	 * Initialises a log file.
+	 */
 	public static void instantiateLog() {
 		try {
 			log = new BufferedWriter(new FileWriter("logfile.txt"));
@@ -117,6 +166,9 @@ public class Functions {
 		}
 	}
 
+	/**
+	 * Closes the log file.
+	 */
 	public static void closeLog() {
 		try {
 			if (log != null)
@@ -125,7 +177,11 @@ public class Functions {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Used to print in console and also put in the log file.
+	 * @param comment
+	 */
 	public static void comment(String comment) {
 		if (showComments) {
 			System.out.println(comment);
@@ -140,7 +196,12 @@ public class Functions {
 			}
 		}
 	}
-
+	
+	/**
+	 * shortens the given string if it is too long.
+	 * @param sentence
+	 * @return
+	 */
 	public String maxLenght(String sentence) {
 		if (sentence.length() > 20) {
 			return sentence.substring(0, 10) + " ... "
@@ -149,16 +210,12 @@ public class Functions {
 			return sentence;
 		}
 	}
-
-	public String showHashMap(HashMap<String, Double> list) {
-		// list = (HashMap<String, Double>) sortByValue(list);
-		String res = "";
-		for (Entry<String, Double> entry : list.entrySet()) {
-			res += entry.getKey() + " => " + entry.getValue() + "\n";
-		}
-		return res;
-	}
-
+	
+	/**
+	 * Extracts an array of words and removes any punctuation from the given string.
+	 * @param dataArg
+	 * @return Returns a String Array with words without spaces and punctuation.
+	 */
 	public String[] extractToWords(String dataArg) {
 		dataArg = Normalizer.normalize(dataArg, Normalizer.Form.NFD);
 		String[] data = dataArg.toLowerCase().split("[^a-zA-Z]");
@@ -177,12 +234,22 @@ public class Functions {
 		}
 		return resData;
 	}
-
+	
+	/**
+	 * Processes the given training file for given gender
+	 * @param filename
+	 * @param gen
+	 */
 	public void processTrainingFile(String filename, GENDER gen) {
 		String text = readTextfile(filename);
 		processTrainingData(text, gen);
 	}
 
+	/**
+	 * Processes the data from the training file for given gender.
+	 * @param text
+	 * @param gen
+	 */
 	public void processTrainingData(String text, GENDER gen) {
 		// First we will extract all the data
 		String[] words = extractToWords(text);

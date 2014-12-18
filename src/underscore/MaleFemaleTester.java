@@ -1,7 +1,13 @@
 package underscore;
 
 import java.util.HashMap;
-
+/**
+ * 
+ * @author Martijn Willemsen & Tim Sonderen
+ * 
+ * Class that contains the main program of the classifier.
+ *
+ */
 public class MaleFemaleTester extends Functions {
 
 	private Classifier c;
@@ -11,10 +17,13 @@ public class MaleFemaleTester extends Functions {
 	// are classified like that
 	private static HashMap<GENDER, Integer> testCorrectResults = new HashMap<GENDER, Integer>();
 	private static HashMap<GENDER, Integer> testWrongResults = new HashMap<GENDER, Integer>();
-
-	public MaleFemaleTester() {
-	}
-
+	
+	/**
+	 * Executes the tests with a confusion matrix at the end.
+	 * @param filename
+	 * @param gender
+	 * @return
+	 */
 	public boolean test(String filename, GENDER gender) {
 		c = new Classifier();
 		numberOfTests++;
@@ -32,14 +41,24 @@ public class MaleFemaleTester extends Functions {
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Makes sure given integer is not null.
+	 * @param integer
+	 * @return Returns given integer or 0.
+	 */
 	private static int notNULL(Integer integer) {
 		if (integer == null)
 			return 0;
 		else
 			return integer;
 	}
-
+	
+	/**
+	 * Launch application for testing without a GUI.
+	 * Contains selection of which training and testing files to use.
+	 * @param args
+	 */
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		String dirBlogstrainM = "resources/blogstrain/M";
@@ -52,16 +71,16 @@ public class MaleFemaleTester extends Functions {
 		String dirSpamtestHam = "resources/spamtest/ham";
 		String dirSpamtestSpam = "resources/spamtest/spam";
 
-		new Trainer(dirSpamtrainHam, dirSpamtrainSpam);
+		new Trainer(dirBlogstrainM, dirBlogstrainF);
 		MaleFemaleTester test = new MaleFemaleTester();
 
-		String folder = dirSpamtestHam;
+		String folder = dirBlogstestM;
 		String[] files = test
 				.removeNullFromArray(test.getFilesInFolder(folder));
 		for (String file : files) {
 			test.test(folder + "//" + file, GENDER.MALE);
 		}
-		folder = dirSpamtestSpam;
+		folder = dirBlogstestF;
 		files = test.removeNullFromArray(test.getFilesInFolder(folder));
 		for (String file : files) {
 			test.test(folder + "//" + file, GENDER.FEMALE);
@@ -78,6 +97,9 @@ public class MaleFemaleTester extends Functions {
 		closeLog();
 	}
 
+	/**
+	 * Creates confusion matrix.
+	 */
 	private static void confusionMatrix() {
 		// Get MALE correct
 		Integer mc = notNULL(testCorrectResults.get(GENDER.MALE));

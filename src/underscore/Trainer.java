@@ -1,5 +1,11 @@
 package underscore;
-
+/**
+ * 
+ * @author Martijn Willemsen & Tim Sonderen
+ * 
+ * Contains functions for training the classifier.
+ *
+ */
 public class Trainer extends Functions {
 
 	/**
@@ -23,6 +29,17 @@ public class Trainer extends Functions {
 			processTrainingFile(dirFemale + "/" + file, GENDER.FEMALE);
 		}
 
+		prepareCounts(GENDER.MALE);
+		prepareCounts(GENDER.FEMALE);
+	}
+	
+	/**
+	 * Trainer to be used by the GUI for extra training after the initialisation.
+	 * @param text
+	 * @param gender
+	 */
+	public Trainer(String text, GENDER gender){
+		processTrainingData(text, gender);
 		prepareCounts(GENDER.MALE);
 		prepareCounts(GENDER.FEMALE);
 	}
