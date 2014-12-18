@@ -1,7 +1,6 @@
 package underscore;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,7 +14,6 @@ public class AwesomeProgram extends Functions{
 	
 	private JFrame frame;
 	private JFrame frame2;
-	private JPanel panel;
 	private JLabel l1;
 	private JLabel l2 = new JLabel("Initializing");
 	private JTextArea a1;
@@ -33,7 +31,7 @@ public class AwesomeProgram extends Functions{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AwesomeProgram window = new AwesomeProgram();
+					new AwesomeProgram();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -44,6 +42,7 @@ public class AwesomeProgram extends Functions{
 	/**
 	 * Create the application.
 	 */
+	@SuppressWarnings("unused")
 	public AwesomeProgram() {
 		String dirBlogstrainM = "resources/blogstrain/M";
 		String dirBlogstrainF = "resources/blogstrain/F";

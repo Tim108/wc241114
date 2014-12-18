@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,11 +17,10 @@ import java.util.Map.Entry;
 
 public class Functions {
 	private static BufferedWriter log;
-	public static final double k = 1;
-	public static final boolean useRandom = false;
-	public static final boolean showComments = true;
-	
-	
+	public static final double k = 0.01;
+	public static final boolean useRandom = true;
+	public static boolean showComments = false;
+
 	public static enum GENDER {
 		MALE, FEMALE, UNKNOWN;
 		public static HashMap<String, Double> maleList = new HashMap<String, Double>();
@@ -31,14 +29,14 @@ public class Functions {
 		public double vocLength;
 		public double prior;
 
-		public GENDER other(){
-			if (this.equals(FEMALE)){
+		public GENDER other() {
+			if (this.equals(FEMALE)) {
 				return MALE;
-			}
-			else{
+			} else {
 				return FEMALE;
 			}
 		}
+
 		public HashMap<String, Double> getList() {
 			if (this.equals(MALE))
 				return maleList;
@@ -53,7 +51,7 @@ public class Functions {
 				return 0;
 		}
 	};
-	
+
 	public String[] getFilesInFolder(String foldername) {
 		File folder = new File(foldername);
 		File[] listOfFiles = folder.listFiles();
@@ -61,40 +59,24 @@ public class Functions {
 
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
-				//comment("File " + listOfFiles[i].getName()+" is read ("+listOfFiles[i].getPath()+")");
-				listOfFilenames[i]=listOfFiles[i].getName();
-			} else if (listOfFiles[i].isDirectory()) {
-				//comment("Directory " + listOfFiles[i].getName()+"is not read, please remove any directories.");
+				listOfFilenames[i] = listOfFiles[i].getName();
 			}
 		}
 		return listOfFilenames;
 	}
-	
-	public String[] removeNullFromArray(String[] firstArray){
+
+	public String[] removeNullFromArray(String[] firstArray) {
 		List<String> list = new ArrayList<String>();
 
-	    for(String s : firstArray) {
-	       if(s != null && s.length() > 0) {
-	          list.add(s);
-	       }
-	    }
+		for (String s : firstArray) {
+			if (s != null && s.length() > 0) {
+				list.add(s);
+			}
+		}
 
-	    return list.toArray(new String[list.size()]);
+		return list.toArray(new String[list.size()]);
 	}
 
-	/*public double calculatePrior(GENDER given) {
-		prepareCounts(given);
-		double C = given.listSize;
-		double k = 1;
-		double V = 2;
-		double N = given.vocLength;
-		double res = (C + k) / (N + k * V);
-		comment("P("+given.name() + ")=(" + C + "+" + k
-				+ ") / (" + N + "+" + k + "*" + V + ")=" + res);
-		given.prior=res;
-		return res;
-	}*/
-	
 	public void prepareCounts(GENDER gender) {
 		Iterator<Double> it = gender.getList().values().iterator();
 		int TotNum = 0;
@@ -104,11 +86,12 @@ public class Functions {
 		gender.listSize = TotNum;
 		comment("NumberOfWords for " + gender.name() + " = " + gender.listSize);
 		gender.vocLength = 0;
-		for(double i : gender.getList().values()){
+		for (double i : gender.getList().values()) {
 			gender.vocLength += i;
 		}
-		comment("NumberOfDIFFERENTWords for " + gender.name() + " = " + gender.vocLength);
-		
+		comment("NumberOfDIFFERENTWords for " + gender.name() + " = "
+				+ gender.vocLength);
+
 	}
 
 	public String readTextfile(String file) {
@@ -117,30 +100,28 @@ public class Functions {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String line;
 			while ((line = br.readLine()) != null) {
-				text += " "+line;
+				text += " " + line;
 			}
 			br.close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return text;
 	}
-	
-	public static void instantiateLog (){
+
+	public static void instantiateLog() {
 		try {
-			log = new BufferedWriter(new FileWriter("logfile_"+new Date().toString().replace(" ", "_").replace(":", "-")+".txt"));
+			log = new BufferedWriter(new FileWriter("logfile.txt"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public static void closeLog(){
+
+	public static void closeLog() {
 		try {
 			if (log != null)
-			log.close();
+				log.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -149,64 +130,59 @@ public class Functions {
 		if (showComments) {
 			System.out.println(comment);
 			try {
-				if (log == null){
+				if (log == null) {
 					instantiateLog();
 				}
 				log.newLine();
 				log.write(comment);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
 	public String maxLenght(String sentence) {
-		if (sentence.length() > 20){
-			return sentence.substring(0, 10)+" ... "+sentence.substring(sentence.length()-10);
-		}
-		else {
+		if (sentence.length() > 20) {
+			return sentence.substring(0, 10) + " ... "
+					+ sentence.substring(sentence.length() - 10);
+		} else {
 			return sentence;
 		}
 	}
-	
+
 	public String showHashMap(HashMap<String, Double> list) {
-		//list = (HashMap<String, Double>) sortByValue(list);
+		// list = (HashMap<String, Double>) sortByValue(list);
 		String res = "";
-		for (Entry<String, Double> entry: list.entrySet()){
-			res +=entry.getKey()+" => "+entry.getValue()+"\n";
+		for (Entry<String, Double> entry : list.entrySet()) {
+			res += entry.getKey() + " => " + entry.getValue() + "\n";
 		}
 		return res;
 	}
-	
-	//DEZE FUNCTIE IS NOG OUD
+
 	public String[] extractToWords(String dataArg) {
 		dataArg = Normalizer.normalize(dataArg, Normalizer.Form.NFD);
 		String[] data = dataArg.toLowerCase().split("[^a-zA-Z]");
 		List<String> result = new LinkedList<String>();
-		for(String s : data){
-			
-	        if(s != null && !s.equals(" ") && !s.equals("")){
-	            result.add(s);
-	        }
+		for (String s : data) {
+
+			if (s != null && !s.equals(" ") && !s.equals("")) {
+				result.add(s);
+			}
 		}
 		int i = 0;
 		String[] resData = new String[result.size()];
-		for(String x : result){
-				resData[i] = x;
-				i++;
+		for (String x : result) {
+			resData[i] = x;
+			i++;
 		}
-	    return resData;
+		return resData;
 	}
-	
 
-	
-	
-	public void processTrainingFile(String filename, GENDER gen){
+	public void processTrainingFile(String filename, GENDER gen) {
 		String text = readTextfile(filename);
-		processTrainingData(text,gen);
+		processTrainingData(text, gen);
 	}
-	
+
 	public void processTrainingData(String text, GENDER gen) {
 		// First we will extract all the data
 		String[] words = extractToWords(text);
