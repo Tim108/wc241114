@@ -211,6 +211,7 @@ public class Functions {
 		Arrays.sort(words);
 		// Put into map
 		HashMap<String, Double> map = gen.getList();
+		HashMap<String, Double> otherMap = gen.other().getList();
 		for (String word : words) {
 			if (map.containsKey(word)) {
 				Double num = map.get(word);
@@ -218,6 +219,9 @@ public class Functions {
 				map.put(word, num + 1);
 			} else {
 				map.put(word, (double) 1);
+			}
+			if (!otherMap.containsKey(word)) {
+				otherMap.put(word, (double) 0);
 			}
 		}
 	}
