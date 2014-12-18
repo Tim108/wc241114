@@ -36,20 +36,24 @@ public class Classifier extends Functions {
 		double PwordsOther = 1;
 		for (String word : words) {
 			if (word != null) {
-				PwordsGiven *= Math.log(p(word, given))/Math.log(2);
-				PwordsOther *= Math.log(p(word, given.other()))/Math.log(2);
+				PwordsGiven *= Math.log(p(word, given))/Math.log(500);
+				//PwordsOther *= Math.log(p(word, given.other()))/Math.log(1000);
+				//System.out.println("##########" + PwordsGiven + "-----" + PwordsOther);
 			}
+			
 		}
+		System.out.println("~~~~~~~~~~" + given.name() + PwordsGiven + "-----" + given.other().name() + PwordsOther);
 		double res = PwordsGiven
-				* given.prior
-				/ (PwordsGiven * given.prior + PwordsOther
-						* given.other().prior);
+				* given.prior;
+				/*/ (PwordsGiven * given.prior + PwordsOther
+						* given.other().prior);*/
 		if (Double.isNaN(res)) {
 			/*comment("P(" + given.name() + "|" + maxLenght(sentence) + ")="
 					+ PwordsGiven + "*" + given.prior + "/ (" + PwordsGiven
 					+ "*" + given.prior + "+" + PwordsOther + "*"
 					+ given.other().prior + "=" + res)*/;
 		}
+		System.out.println("res = " + res);
 		return res;
 	}
 
