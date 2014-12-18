@@ -69,9 +69,10 @@ public class MaleFemaleTester extends Functions {
 		for(String file: files){
 			test.test(folder+"//"+file, GENDER.FEMALE);
 		}
-		if (test.numberOfTests > 0)
-		comment("There were "+test.numberOfCorrectResults+" tests that were succesfull (out of "+test.numberOfTests+"). This is "+((double)(test.numberOfCorrectResults/test.numberOfTests)*100)+"%.");
-		
+		if (test.numberOfTests > 0){
+			double prc = ((double)((double)test.numberOfCorrectResults/(double)test.numberOfTests))*100;
+			comment("There were "+test.numberOfCorrectResults+" tests that were succesfull (out of "+test.numberOfTests+"). This is "+ prc +"%.");
+		}
 		//testCorrectResults.put(GENDER.MALE, 5);
 		//testCorrectResults.put(GENDER.FEMALE, 15);
 		//testWrongResults.put(GENDER.MALE, 25);

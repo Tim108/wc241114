@@ -12,12 +12,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
 public class Functions {
-	//public final char[] punctuation = "(){},;!?<>%'\"*#_.".toCharArray();
-	private final String[] punctuation = {"\\(", "\\)", "\\{", "\\}", "\\,", ";", "!", "\\?", "<", ">", "\\%", "\\'", "\\\\", "/", "\"", "\\*", "#", "_", "."};
 	private static BufferedWriter log;
 	public static final double k = 1;
 	public static final boolean useRandom = false;
@@ -178,14 +177,23 @@ public class Functions {
 	}
 	
 	//DEZE FUNCTIE IS NOG OUD
-	public String[] extractToWords(String data) {
-		data = Normalizer.normalize(data, Normalizer.Form.NFD);
-		for(String punc : punctuation){
-			data = data.replaceAll(punc, "");
+	public String[] extractToWords(String dataArg) {
+		dataArg = Normalizer.normalize(dataArg, Normalizer.Form.NFD);
+		String[] data = dataArg.toLowerCase().split("[^a-zA-Z]");
+		List<String> result = new LinkedList<String>();
+		for(String s : data){
+			
+	        if(s != null && !s.equals(" ") && !s.equals("")){
+	            result.add(s);
+	        }
 		}
-		String[] returnData = data.toLowerCase().trim().split("");
-		//SetUp.comment(Arrays.toString(returnData));
-		return returnData;
+		int i = 0;
+		String[] resData = new String[result.size()];
+		for(String x : result){
+				resData[i] = x;
+				i++;
+		}
+	    return resData;
 	}
 	
 

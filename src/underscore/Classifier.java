@@ -20,11 +20,13 @@ public class Classifier extends Functions {
 		double V = 2;// given.vocLength+given.other().vocLength;
 		double N = given.listSize + given.other().listSize;
 		double res = (C + k) / (N + (k * V));
-		//if (Double.isNaN(res) || Double.isInfinite(res)){
-		comment(">> P(" + w + "|" + given.name() + ")=(" + C + "+" + k
-		 + ") / (" + N + "+" + k + "*" + V + ")=" + res +" = "+Math.log(res) / Math.log(2) );
-		//}
-		//return Math.log(res) / Math.log(2);
+		if (Double.isNaN(res) || Double.isInfinite(res)){
+			System.out.println("res =" + res);
+		// comment(">> P(" + w + "|" + given.name() + ")=(" + C + "+" + k
+		// + ") / (" + N + "+" + k + "*" + V + ")=" + res +" = "+Math.log(res) /
+		// Math.log(2) + "-->" + res );
+		}
+		// return Math.log(res) / Math.log(2);
 		return res;
 	}
 
@@ -33,20 +35,21 @@ public class Classifier extends Functions {
 		double PwordsGiven = 1;
 		double PwordsOther = 1;
 		for (String word : words) {
-			PwordsGiven *= p(word, given); //Dit wordt nu -Infinity, daarom krijgen we een NaN
-			PwordsOther *= p(word, given.other());//Dit wordt nu -Infinity, daarom krijgen we een NaN
+			if (word != null) {
+				PwordsGiven *= Math.log(p(word, given))/Math.log(2);
+				PwordsOther *= Math.log(p(word, given.other()))/Math.log(2);
+			}
 		}
 		double res = PwordsGiven
 				* given.prior
 				/ (PwordsGiven * given.prior + PwordsOther
-						* given.other().prior)
-				;
-		if (Double.isNaN(res)){
-			comment("P(" + given.name() + "|" + maxLenght(sentence)+ ")="+PwordsGiven+
-				"*"+ given.prior+
-				"/ ("+PwordsGiven +"*"+ given.prior +"+"+ PwordsOther+
-						"*"+ given.other().prior+"=" + res);
-					}
+						* given.other().prior);
+		if (Double.isNaN(res)) {
+			/*comment("P(" + given.name() + "|" + maxLenght(sentence) + ")="
+					+ PwordsGiven + "*" + given.prior + "/ (" + PwordsGiven
+					+ "*" + given.prior + "+" + PwordsOther + "*"
+					+ given.other().prior + "=" + res)*/;
+		}
 		return res;
 	}
 
@@ -63,8 +66,8 @@ public class Classifier extends Functions {
 			return GENDER.FEMALE;
 		} else {
 			i++;
-			comment("ITS UNKNOWN: " + PMale + "==" + PFemale + ". This is the "
-					+ (i) + "th time. The tested sentence is: " + sentence);
+			/*comment("ITS UNKNOWN: " + PMale + "==" + PFemale + ". This is the "
+					+ (i) + "th time. The tested sentence is: " + sentence);*/
 			if (useRandom) {
 				if (Math.random() > 0.5) {
 					return GENDER.MALE;
